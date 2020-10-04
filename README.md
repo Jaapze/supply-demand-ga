@@ -1,5 +1,5 @@
-## General info
-This is a project where I use a Genetic Algorithm to
+## Genetic Algorithm experiment
+A Genetic Algorithm to
 divide people (demand) into groups (supply).
 
 ## Commands
