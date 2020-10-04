@@ -1,0 +1,22 @@
+
+{
+  "name": "jaap-redeker/ga",
+  "description": "Genetic Algorithm test project",
+  "version": "0.0.1",
+  "authors": [
+    {
+      "name": "Jaap Redeker"
+    }
+  ],
+  "require": {
+    "php": ">=7.4",
+    "ext-json": "*"
+  },
+  "require-dev": {
+  },
+  "autoload": {
+    "psr-4": {
+      "GA\\": "src/"
+    }
+  }
+}
