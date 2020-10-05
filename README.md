@@ -12,6 +12,16 @@ We can now use this algorithm to
 distribute people (demand) among objects (supply) and
 match them by chosen options.
 
+## Configuration
+title | description
+----- | -----------
+CHANCE_OF_MUTATION | chance of mutation per gene
+POOL_SIZE | Size of population per generation
+ELITISM | This will transfer the parents to the next generation
+
+You can also change $maxStagnant (found in index.php for now).
+This defines the max amount of stagnant.
+
 ## Commands
 Run the following command for creating test data:
 ```
