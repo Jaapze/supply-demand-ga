@@ -32,6 +32,7 @@ final class Algorithm
         $this->poolSize = $poolSize;
         $this->elitism = $elitism;
         $this->reproductionService = new Reproduction(
+            $this->demandCount,
             $this->fitnessService,
             $this->chanceOfMutation,
             $this->elitism
@@ -54,7 +55,7 @@ final class Algorithm
 
         for ($i = $offset; $i < $this->poolSize; $i++) {
             $child = $this->reproductionService->crossover($mommy, $daddy);
-            $child = $this->reproductionService->mutate($child, $this->demandCount);
+            $child = $this->reproductionService->mutate($child);
             $newPopulation->addIndividual($child);
         }
 

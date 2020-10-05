@@ -6,19 +6,21 @@ use GA\Individual;
 
 final class Reproduction
 {
+    private int $demandSize;
+
     private Fitness $fitnessService;
 
     private float $chanceOfMutation;
 
     private bool $elitism;
 
-    public function __construct(Fitness $fitnessService, float $changeOfMutation, bool $elitism)
+    public function __construct(int $demandSize, Fitness $fitnessService, float $changeOfMutation, bool $elitism)
     {
+        $this->demandSize = $demandSize;
         $this->fitnessService = $fitnessService;
         $this->chanceOfMutation = $changeOfMutation;
         $this->elitism = $elitism;
     }
-
 
     public function crossover(Individual $individual, Individual $individual2): Individual
     {
@@ -42,9 +44,9 @@ final class Reproduction
         return $childIndividual;
     }
 
-    public function mutate(Individual $individual, int $demandCount): Individual
+    public function mutate(Individual $individual): Individual
     {
-        $demandSet = range(0, $demandCount - 1);
+        $demandSet = range(0, $this->demandSize - 1);
         $randomDemandSet = array_diff($demandSet, $individual->getGenes());
 
         if (empty($randomDemandSet)) {
