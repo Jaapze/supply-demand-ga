@@ -1,26 +1,26 @@
 <?php
 
-use GA\Main;
+use GA\Algorithm;
 
 require_once('vendor/autoload.php');
-require_once('src/Main.php');
+require_once('src/Algorithm.php');
 
 $fileContent = file_get_contents('./data/data.json');
 $jsonData = json_decode($fileContent, true);
 $maxScore = count($jsonData['supply']) * strlen($jsonData['supply'][0]);
-$mainProgram = new Main($jsonData['demand'], $jsonData['supply']);
+$algorithm = new Algorithm($jsonData['demand'], $jsonData['supply']);
 
 $maxStagnant = 600;
 $time1 = microtime(true);
 $generationCount = 0;
 $generationStagnant = 0;
 
-$population = $mainProgram->generateStartingPopulation();
+$population = $algorithm->generateStartingPopulation();
 $lastFitScore = $population->getFittest()->getFitness();
 
 while ($population->getFittest()->getFitness() > 0) {
     $generationCount++;
-    $population = $mainProgram->evolve($population);
+    $population = $algorithm->evolve($population);
     $currentFitness = $population->getFittest()->getFitness();
 
     if ($currentFitness < $lastFitScore) {
