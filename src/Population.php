@@ -41,15 +41,11 @@ final class Population
     /**
      * @return Individual[]
      */
-    public function getIndividuals(): array
+    public function getEliteParents(): array
     {
-        return $this->individuals;
-    }
-
-    public function sortIndividuals(): void
-    {
+        $sortedIndividuals = $this->individuals;
         usort(
-            $this->individuals,
+            $sortedIndividuals,
             function (Individual $a, Individual $b) {
                 if ($a->getFitness() === $b->getFitness()) {
                     return 0;
@@ -57,6 +53,8 @@ final class Population
                 return ($a->getFitness() < $b->getFitness()) ? -1 : 1;
             }
         );
+
+        return array_slice($sortedIndividuals, 0, 2);
     }
 
     public function addIndividual(Individual $individual): void

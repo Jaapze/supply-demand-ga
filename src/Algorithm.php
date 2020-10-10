@@ -8,13 +8,13 @@ use GA\Service\Reproduction;
 final class Algorithm
 {
     /** @var float */
-    private const CHANCE_OF_MUTATION = 0.07;
+    private const CHANCE_OF_MUTATION = 0.01;
 
     /** @var int */
     private const POOL_SIZE = 350;
 
     /** @var int */
-    private const ELITISM = false;
+    private const ELITISM = true;
 
     private Reproduction $reproductionService;
 
@@ -49,21 +49,19 @@ final class Algorithm
     public function evolve(Population $population): Population
     {
         $newPopulation = new Population($this->fitnessService);
-        $population->sortIndividuals();
+        $parents = $population->getEliteParents();
         $offset = 0;
-        $mommy = $population->getIndividuals()[0];
-        $daddy = $population->getIndividuals()[1];
 
         if (self::ELITISM) {
-            $newPopulation->addIndividual($mommy);
-            $newPopulation->addIndividual($daddy);
+            $newPopulation->addIndividual($parents[0]);
+            $newPopulation->addIndividual($parents[1]);
             $offset = 2;
         }
 
         for ($i = $offset; $i < self::POOL_SIZE; $i++) {
-            $child = $this->reproductionService->crossover($mommy, $daddy);
-            $child = $this->reproductionService->mutate($child);
-            $newPopulation->addIndividual($child);
+            $newIndividual = $this->reproductionService->crossover($parents[0], $parents[1]);
+            $newIndividual = $this->reproductionService->mutate($newIndividual);
+            $newPopulation->addIndividual($newIndividual);
         }
 
         return $newPopulation;

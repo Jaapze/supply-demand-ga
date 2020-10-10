@@ -16,18 +16,17 @@ $generationCount = 0;
 $generationStagnant = 0;
 
 $population = $algorithm->generateStartingPopulation();
-$lastFitScore = $population->getFittest()->getFitness();
+$bestIndividual = $population->getFittest();
 
 while ($population->getFittest()->getFitness() > 0) {
     $generationCount++;
     $population = $algorithm->evolve($population);
     $currentFitness = $population->getFittest()->getFitness();
 
-    if ($currentFitness < $lastFitScore) {
+    if ($currentFitness < $bestIndividual->getFitness()) {
         echo "\n Generation: " . $generationCount . " (Stagnant:" . $generationStagnant . ") Fittest: " . $currentFitness . "/" . $maxScore;
         $generationStagnant = 0;
-
-        $lastFitScore = $currentFitness;
+        $bestIndividual = $population->getFittest();
     } else {
         $generationStagnant++;
     }
@@ -44,8 +43,8 @@ $extraInfo = false;
 $date = (new DateTime())->format('Y-m-d H:i:s');
 
 $output = '[' . $date . '] Solution at generation: ' . $generationCount . ' time: ' . round($time2 - $time1, 2) . 's';
-$output .= PHP_EOL . 'Genes   : ' . implode(',', $population->getFittest()->getGenes());
-$output .= PHP_EOL . 'Score   : ' . $population->getFittest()->getFitness();
+$output .= PHP_EOL . 'Genes   : ' . implode(',', $bestIndividual->getGenes());
+$output .= PHP_EOL . 'Score   : ' . $bestIndividual->getFitness();
 $output .= PHP_EOL . '---------------------------------------------------------' . PHP_EOL;
 
 echo PHP_EOL . PHP_EOL . $output;
