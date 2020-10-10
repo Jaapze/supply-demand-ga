@@ -41,12 +41,19 @@ while ($population->getFittest()->getFitness() > 0) {
 $time2 = microtime(true);
 $extraInfo = false;
 
-echo "\n";
-echo "\nSolution at generation: " . $generationCount . " time: " . round($time2 - $time1, 2) . "s";
-echo "\n---------------------------------------------------------\n";
-echo "\nGenes   : " . implode(',', $population->getFittest()->getGenes());
-echo "\nScore   : " . $population->getFittest()->getFitness();
-echo "\n---------------------------------------------------------\n";
+$date = (new DateTime())->format('Y-m-d H:i:s');
+
+$output = '[' . $date . '] Solution at generation: ' . $generationCount . ' time: ' . round($time2 - $time1, 2) . 's';
+$output .= PHP_EOL . 'Genes   : ' . implode(',', $population->getFittest()->getGenes());
+$output .= PHP_EOL . 'Score   : ' . $population->getFittest()->getFitness();
+$output .= PHP_EOL . '---------------------------------------------------------' . PHP_EOL;
+
+echo PHP_EOL . PHP_EOL . $output;
+
+if (!is_dir('log/')) {
+    mkdir('log');
+}
+file_put_contents('log/log_'.date("j.n.Y").'.log', $output, FILE_APPEND);
 
 if ($extraInfo) {
     foreach ($population->getFittest()->getGenes() as $key => $gene) {
