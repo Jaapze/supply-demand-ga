@@ -20,9 +20,6 @@ POOL_SIZE | Size of population per generation
 ELITISM | Transfer the parents to the next generation
 MAX_STAGNANT | Max amount of stagnant
 
-You can also change $maxStagnant (found in index.php for now).
-This defines the max amount of stagnant.
-
 ## Commands
 Run the following command for creating test data:
 ```
