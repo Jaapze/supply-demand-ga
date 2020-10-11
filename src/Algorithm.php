@@ -21,11 +21,7 @@ final class Algorithm
 
     private Reproduction $reproductionService;
 
-    /** @var string[] */
-    private array $demand;
-
-    /** @var string[] */
-    private array $supply;
+    private Fitness $fitnessService;
 
     private ?Individual $bestIndividual = null;
 
@@ -33,7 +29,11 @@ final class Algorithm
 
     private int $stagnantCount = 0;
 
-    private Fitness $fitnessService;
+    /** @var string[] */
+    private array $demand;
+
+    /** @var string[] */
+    private array $supply;
 
     /**
      * @param string[] $demand
