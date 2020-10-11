@@ -17,7 +17,8 @@ title | description
 ----- | -----------
 CHANCE_OF_MUTATION | chance of mutation per gene
 POOL_SIZE | Size of population per generation
-ELITISM | This will transfer the parents to the next generation
+ELITISM | Transfer the parents to the next generation
+MAX_STAGNANT | Max amount of stagnant
 
 You can also change $maxStagnant (found in index.php for now).
 This defines the max amount of stagnant.

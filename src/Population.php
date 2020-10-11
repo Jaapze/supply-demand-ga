@@ -6,6 +6,9 @@ use GA\Service\Fitness;
 
 final class Population
 {
+    /** @var int */
+    private const MAX_FITNESS = 0;
+
     /** @var Individual[] */
     private array $individuals = [];
 
@@ -26,7 +29,7 @@ final class Population
         }
     }
 
-    public function getFittest(): Individual
+    public function getBestIndividual(): Individual
     {
         $fittest = reset($this->individuals);
         foreach ($this->individuals as $individual) {
@@ -60,5 +63,10 @@ final class Population
     public function addIndividual(Individual $individual): void
     {
         $this->individuals[] = $individual;
+    }
+
+    public function maxFitnessReached(): bool
+    {
+        return $this->getBestIndividual()->getFitness() <= self::MAX_FITNESS;
     }
 }

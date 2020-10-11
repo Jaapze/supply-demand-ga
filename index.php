@@ -7,69 +7,54 @@ require_once('src/Algorithm.php');
 
 $fileContent = file_get_contents('./data/data.json');
 $jsonData = json_decode($fileContent, true);
-$maxScore = count($jsonData['supply']) * strlen($jsonData['supply'][0]);
 $algorithm = new Algorithm($jsonData['demand'], $jsonData['supply']);
-
-$maxStagnant = 600;
 $time1 = microtime(true);
-$generationCount = 0;
-$generationStagnant = 0;
 
+$message = PHP_EOL . 'Generation: %d (Stagnant: %d) Fittest: %d/%d';
+$maxStagnantMessage = PHP_EOL . 'HALT! Exceeded %d stagnant generations';
 $population = $algorithm->generateStartingPopulation();
-$bestIndividual = $population->getFittest();
+$currentFitness = $algorithm->getMaxFitness();
+$currentStagnant = 0;
 
-while ($population->getFittest()->getFitness() > 0) {
-    $generationCount++;
+while (!$population->maxFitnessReached()) {
+    $currentStagnant = $algorithm->getStagnantCount();
     $population = $algorithm->evolve($population);
-    $currentFitness = $population->getFittest()->getFitness();
 
-    if ($currentFitness < $bestIndividual->getFitness()) {
-        echo "\n Generation: " . $generationCount . " (Stagnant:" . $generationStagnant . ") Fittest: " . $currentFitness . "/" . $maxScore;
-        $generationStagnant = 0;
-        $bestIndividual = $population->getFittest();
-    } else {
-        $generationStagnant++;
+    if ($algorithm->getBestIndividual()->getFitness() < $currentFitness) {
+        $currentFitness = $algorithm->getBestIndividual()->getFitness();
+        echo sprintf(
+            $message,
+            $algorithm->getGenerationCount(),
+            $currentStagnant,
+            $algorithm->getBestIndividual()->getFitness(),
+            $algorithm->getMaxFitness()
+        );
     }
 
-    if ($generationStagnant > $maxStagnant) {
-        echo "\n HALT! Exceeded " . $maxStagnant . " stagnant generations";
+    if ($algorithm->isMaxStagnantReached()) {
+        echo sprintf($maxStagnantMessage, Algorithm::MAX_STAGNANT);
         break;
     }
 }
 
 $time2 = microtime(true);
-$extraInfo = false;
+$outputMessage = '[%s] Solution at generation: %d time: %ds %sGenes: %s %sScore: %d %s-----------------------------%s';
+$filledOutputMessage = sprintf(
+    $outputMessage,
+    (new DateTime())->format('Y-m-d H:i:s'),
+    $algorithm->getGenerationCount(),
+    round($time2 - $time1, 2),
+    PHP_EOL,
+    implode(',', $algorithm->getBestIndividual()->getGenes()),
+    PHP_EOL,
+    $algorithm->getBestIndividual()->getFitness(),
+    PHP_EOL,
+    PHP_EOL
+);
 
-$date = (new DateTime())->format('Y-m-d H:i:s');
-
-$output = '[' . $date . '] Solution at generation: ' . $generationCount . ' time: ' . round($time2 - $time1, 2) . 's';
-$output .= PHP_EOL . 'Genes   : ' . implode(',', $bestIndividual->getGenes());
-$output .= PHP_EOL . 'Score   : ' . $bestIndividual->getFitness();
-$output .= PHP_EOL . '---------------------------------------------------------' . PHP_EOL;
-
-echo PHP_EOL . PHP_EOL . $output;
+echo PHP_EOL . PHP_EOL . $filledOutputMessage;
 
 if (!is_dir('log/')) {
     mkdir('log');
 }
-file_put_contents('log/log_'.date("j.n.Y").'.log', $output, FILE_APPEND);
-
-if ($extraInfo) {
-    foreach ($population->getFittest()->getGenes() as $key => $gene) {
-        $supplyItem = str_split($jsonData['supply'][$key]);
-        $demandItem = str_split($jsonData['demand'][$gene]);
-
-        $fitness = 0;
-        foreach ($demandItem as $charKey => $optionChar) {
-            if ($supplyItem[$charKey] !== $optionChar) {
-                $fitness++;
-            }
-        }
-
-        echo "\nSupply       : " . $jsonData['supply'][$key];
-        echo "\nDemand       : " . $jsonData['demand'][$gene];
-        echo "\nDifference   : " . $fitness;
-        echo "\n----";
-    }
-    echo "\n---------------------------------------------------------\n";
-}
+file_put_contents('log/log_' . date("j.n.Y") . '.log', $filledOutputMessage, FILE_APPEND);

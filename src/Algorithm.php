@@ -16,6 +16,9 @@ final class Algorithm
     /** @var int */
     private const ELITISM = true;
 
+    /** @var int */
+    public const MAX_STAGNANT = 600;
+
     private Reproduction $reproductionService;
 
     /** @var string[] */
@@ -23,6 +26,12 @@ final class Algorithm
 
     /** @var string[] */
     private array $supply;
+
+    private ?Individual $bestIndividual = null;
+
+    private int $generationCount = 0;
+
+    private int $stagnantCount = 0;
 
     private Fitness $fitnessService;
 
@@ -48,6 +57,7 @@ final class Algorithm
 
     public function evolve(Population $population): Population
     {
+        $this->generationCount++;
         $newPopulation = new Population($this->fitnessService);
         $parents = $population->getEliteParents();
         $offset = 0;
@@ -64,6 +74,8 @@ final class Algorithm
             $newPopulation->addIndividual($newIndividual);
         }
 
+        $this->setBestIndividual($newPopulation);
+
         return $newPopulation;
     }
 
@@ -73,5 +85,46 @@ final class Algorithm
         $population->fillPopulation(count($this->demand), count($this->supply), self::POOL_SIZE);
 
         return $population;
+    }
+
+    public function isMaxStagnantReached(): bool
+    {
+        return $this->stagnantCount >= self::MAX_STAGNANT;
+    }
+
+    public function getMaxFitness(): int
+    {
+        return count($this->supply) * strlen($this->supply[0]);
+    }
+
+    public function getBestIndividual(): ?Individual
+    {
+        return $this->bestIndividual;
+    }
+
+    public function getGenerationCount(): int
+    {
+        return $this->generationCount;
+    }
+
+    public function getStagnantCount(): int
+    {
+        return $this->stagnantCount;
+    }
+
+    private function hasBetterIndividual(Population $population): bool
+    {
+        return $this->bestIndividual === null
+            || $population->getBestIndividual()->getFitness() < $this->bestIndividual->getFitness();
+    }
+
+    private function setBestIndividual(Population $population): void
+    {
+        if ($this->hasBetterIndividual($population)) {
+            $this->stagnantCount = 0;
+            $this->bestIndividual = $population->getBestIndividual();
+        }
+
+        $this->stagnantCount++;
     }
 }
