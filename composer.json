@@ -1,4 +1,3 @@
-
 {
   "name": "jaap-redeker/ga",
   "description": "Genetic Algorithm test project",
@@ -10,7 +9,8 @@
   ],
   "require": {
     "php": ">=7.4",
-    "ext-json": "*"
+    "ext-json": "*",
+    "symfony/console": "^5.1"
   },
   "require-dev": {
   },

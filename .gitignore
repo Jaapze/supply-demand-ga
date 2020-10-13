@@ -1,5 +1,6 @@
 /vendor
 composer.lock
 .idea
-/data/data.json
+/data/*
+!data/.gitkeep
 /log
