@@ -23,7 +23,7 @@ MAX_STAGNANT | Max amount of stagnant
 ## Commands
 Run the following command for creating test data:
 ```
-$ php command/CreateData.php [number-of-supply] [number-of-demand] [number-of-options]
+$ php app ga:create-data [number-of-supply] [number-of-demand] [number-of-options]
 ```
 
 This is for actually running the command:
