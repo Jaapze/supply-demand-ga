@@ -13,12 +13,14 @@ distribute people (demand) among objects (supply) and
 match them by chosen options.
 
 ## Configuration
+You can find a configuration file in the config folder with the following configurations:
+
 title | description
 ----- | -----------
-CHANCE_OF_MUTATION | chance of mutation per gene
-POOL_SIZE | Size of population per generation
-ELITISM | Transfer the parents to the next generation
-MAX_STAGNANT | Max amount of stagnant
+chance-of-mutation | chance of mutation per gene
+pool-size | Size of population per generation
+elitism | Transfer the parents to the next generation
+max-stagnant | Max amount of stagnant
 
 ## Commands
 Run the following command for creating test data:
@@ -26,9 +28,9 @@ Run the following command for creating test data:
 $ php app ga:create-data [number-of-supply] [number-of-demand] [number-of-options]
 ```
 
-This is for actually running the command:
+This is for actually running the algorithm:
 ```
-$ php index.php
+$ php app ga:run-algorithm
 ```
 
 ## Output example
@@ -41,12 +43,10 @@ Generation: 896 (Stagnant:24) Fittest: 34/500
 Generation: 918 (Stagnant:21) Fittest: 33/500
 HALT! Exceeded 600 stagnant generations
 
-Solution at generation: 1519 time: 61.25s
----------------------------------------------------------
-
-Genes   : 473,265,373,444,462,312,496,234,86,103,230,360,6,271,139,323,170,430,435,424,395,384,160,168,182,451,32,478,15,398,294,289,216,179,273,401,178,441,146,378,226,379,64,252,69,431,177,148,120,51
-Score   : 33
----------------------------------------------------------
+[2020-10-13 19:43:09] Solution at generation: 1560 time: 62s
+Genes: 473,348,228,144,462,312,165,234,323,84,125,264,215,351,390,461,29,373,435,424,395,384,160
+Score: 30
+-----------------------------
 ```
 **Generation:** Current generation.<br/>
 **Stagnant:** The number of generations went by without a better individual.<br/>

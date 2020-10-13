@@ -10,9 +10,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class CreateData extends Command
 {
     protected string $commandName = 'ga:create-data';
+
     protected string $description = 'create data for algorithm';
+
     protected string $numberOfSupplyArg = 'number-of-supply';
+
     protected string $numberOfDemandArg = 'number-of-demand';
+
     protected string $numberOfOptionsArg = 'number-of-options';
 
     protected function configure(): void
